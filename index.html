@@ -1,0 +1,891 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>디자인경영센터 REINVENT 2.0 타자 대회</title>
+    <style>
+        :root {
+            --red: #c81743;
+            --ink: #171820;
+            --sub: #727583;
+            --line: #e7e9ef;
+            --good: #16966a
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: Pretendard, "Noto Sans KR", "Malgun Gothic", sans-serif;
+            color: var(--ink);
+            background: radial-gradient(circle at 85% 8%, #ffe4eb 0, transparent 26%), linear-gradient(135deg, #f8f8fb, #eceef5);
+            min-height: 100vh
+        }
+
+        button,
+        input {
+            font: inherit
+        }
+
+        .hidden {
+            display: none !important
+        }
+
+        .shell,
+        .game {
+            width: min(1180px, calc(100% - 34px));
+            margin: auto;
+            padding: 28px 0 48px
+        }
+
+        .brand {
+            text-align: center
+        }
+
+        .brand img {
+            width: min(310px, 44vw);
+            height: auto
+        }
+
+        .hero {
+            margin: 48px 0 32px;
+            text-align: left
+        }
+
+        .eyebrow {
+            color: var(--red);
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            font-size: 14px
+        }
+
+        .hero h1 {
+            font-size: clamp(38px, 6vw, 68px);
+            line-height: 1.08;
+            letter-spacing: -3px;
+            margin: 12px 0
+        }
+
+        .hero h1 span {
+            color: var(--red)
+        }
+
+        .hero p {
+            color: var(--sub);
+            font-size: 18px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1.2fr .8fr;
+            gap: 24px
+        }
+
+        .card {
+            background: #fffd;
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow: 0 18px 55px #25283b13
+        }
+
+        .head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .head h2 {
+            font-size: 19px
+        }
+
+        .reset {
+            border: 1px solid #ddd;
+            background: #fff;
+            border-radius: 99px;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--sub)
+        }
+
+        .ranking {
+            display: grid;
+            gap: 9px;
+            min-height: 248px
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 58px 1fr auto;
+            gap: 12px;
+            align-items: center;
+            background: #f7f7fa;
+            border-radius: 16px;
+            padding: 13px
+        }
+
+        .row:first-child {
+            background: #fff5c7
+        }
+
+        .rank,
+        .score,
+        .name {
+            font-weight: 900
+        }
+
+        .team {
+            font-size: 12px;
+            color: var(--sub)
+        }
+
+        .empty {
+            display: grid;
+            place-items: center;
+            text-align: center;
+            min-height: 215px;
+            border: 2px dashed var(--line);
+            border-radius: 18px;
+            color: var(--sub)
+        }
+
+        .challenge {
+            background: linear-gradient(145deg, #1d1e27, #08090e);
+            color: #fff;
+            min-height: 330px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between
+        }
+
+        .challenge b {
+            font-size: 74px;
+            color: #ff5872
+        }
+
+        .challenge p {
+            color: #b4b5be;
+            line-height: 1.6
+        }
+
+        .go,
+        .primary {
+            border: 0;
+            background: var(--red);
+            color: #fff;
+            border-radius: 15px;
+            padding: 16px;
+            font-weight: 900
+        }
+
+        .go {
+            width: 100%;
+            font-size: 18px
+        }
+
+        .typos {
+            margin-top: 24px;
+            background: #171820;
+            color: #fff;
+            border-radius: 28px;
+            padding: 27px;
+            box-shadow: 0 18px 55px #25283b18
+        }
+
+        .typos h2 {
+            margin: 0
+        }
+
+        .typos .desc {
+            color: #aeb0bc;
+            font-size: 13px;
+            margin: 5px 0 18px
+        }
+
+        .typo-list {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 10px
+        }
+
+        .typo {
+            background: #ffffff0d;
+            border: 1px solid #ffffff16;
+            border-radius: 16px;
+            padding: 14px;
+            min-width: 0
+        }
+
+        .typed {
+            color: #ff7b8a;
+            font-weight: 900;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+
+        .arrow,
+        .by {
+            color: #858994;
+            font-size: 11px;
+            margin-top: 6px
+        }
+
+        .answer {
+            font-size: 13px;
+            margin-top: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+
+        .typo-empty {
+            grid-column: 1/-1;
+            text-align: center;
+            color: #90939d;
+            padding: 22px;
+            border: 1px dashed #ffffff22;
+            border-radius: 16px
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: #090a10b8;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            backdrop-filter: blur(7px);
+            z-index: 10
+        }
+
+        .dialog {
+            width: min(470px, 100%);
+            background: #fff;
+            border-radius: 25px;
+            padding: 28px
+        }
+
+        .field {
+            margin: 14px 0
+        }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 7px
+        }
+
+        .field input {
+            width: 100%;
+            padding: 14px;
+            border: 1.5px solid var(--line);
+            border-radius: 13px
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px
+        }
+
+        .actions button {
+            flex: 1;
+            border: 0;
+            border-radius: 13px;
+            padding: 14px;
+            font-weight: 900
+        }
+
+        .ghost {
+            background: #eee
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 28px
+        }
+
+        .stats {
+            display: flex;
+            gap: 8px
+        }
+
+        .stat {
+            background: #fff;
+            border-radius: 14px;
+            padding: 11px 14px;
+            min-width: 105px;
+            text-align: right
+        }
+
+        .stat small {
+            display: block;
+            color: var(--sub)
+        }
+
+        .stage {
+            background: #fff;
+            border-radius: 28px;
+            padding: 45px;
+            min-height: 500px;
+            box-shadow: 0 18px 55px #25283b13
+        }
+
+        .bar {
+            height: 7px;
+            background: #eee;
+            border-radius: 50px;
+            overflow: hidden
+        }
+
+        .bar i {
+            display: block;
+            height: 100%;
+            background: var(--red)
+        }
+
+        .meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--sub);
+            font-size: 13px;
+            font-weight: 800;
+            margin: 18px 0 55px
+        }
+
+        .sentence {
+            text-align: center;
+            font-size: clamp(25px, 4vw, 41px);
+            font-weight: 900;
+            line-height: 1.55;
+            word-break: keep-all
+        }
+
+        .blank {
+            display: inline-block;
+            width: 100%;
+            color: transparent;
+            border-bottom: 4px solid var(--red);
+            background: #f1f2f6;
+            white-space: pre
+        }
+
+        .type {
+            position: relative;
+            max-width: 830px;
+            margin: 34px auto 0
+        }
+
+        .type input {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 66px;
+            opacity: 0
+        }
+
+        .visual {
+            min-height: 66px;
+            border: 2px solid var(--line);
+            border-radius: 17px;
+            padding: 17px 19px;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--ink)
+        }
+
+        .caret {
+            display: inline-block;
+            width: 2px;
+            height: 26px;
+            background: var(--red);
+            animation: b .7s infinite
+        }
+
+        @keyframes b {
+            50% {
+                opacity: 0
+            }
+        }
+
+        .note {
+            display: block;
+            text-align: center;
+            color: var(--sub);
+            font-size: 12px;
+            margin-top: 13px
+        }
+
+        .result {
+            text-align: center
+        }
+
+        .result .big {
+            font-size: 52px;
+            font-weight: 950;
+            color: var(--red)
+        }
+
+        .resultgrid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 20px 0
+        }
+
+        .resultgrid div {
+            background: #f4f5f8;
+            padding: 12px;
+            border-radius: 13px
+        }
+
+        .resultgrid small {
+            display: block;
+            color: var(--sub)
+        }
+
+        @media(max-width:750px) {
+
+            .grid,
+            .typo-list {
+                grid-template-columns: 1fr
+            }
+
+            .top {
+                flex-direction: column;
+                align-items: flex-start
+            }
+
+            .stats {
+                overflow: auto;
+                width: 100%
+            }
+
+            .stage {
+                padding: 24px 17px
+            }
+
+            .hero h1 {
+                letter-spacing: -2px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main id="home" class="shell">
+        <div class="brand"><img
+                src="data:image/png;base64,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"
+                alt="CTO부문 디자인경영센터 Junior Board 로고"></div>
+        <section class="hero">
+            <div class="eyebrow"> 문제 드러내기, 이기는 실행하기</div>
+            <h1>디자인경영센터 <span>REINVENT 2.0</span><br>타자 대회</h1>
+            <!--<p>5개의 문장, 단 한 번의 도전. 빠르고 정확하게 완성하세요.</p> -->
+        </section>
+        <section class="grid">
+            <div class="card">
+                <div class="head">
+                    <h2>🏆 도전자 랭킹</h2><button id="reset" class="reset">RESET</button>
+                </div>
+                <div id="ranking" class="ranking"></div>
+            </div>
+            <div class="card challenge">
+                <div><b>5</b>
+                    <h2>리인벤트2.0 도전</h2>
+                    <p>10개의 문장 중 5개가 무작위로 출제됩니다.<br>문장 뒷부분의 빈칸을 완성해 보세요.</p>
+                </div><button id="challenge" class="go">도전 시작하기 →</button>
+            </div>
+        </section>
+        <section class="typos">
+            <h2>⌨️ 최고의 오답 모음</h2>
+            <!--<p class="desc">최종 제출한 문장에 오타나 잘못된 띄어쓰기가 있을 때 기록됩니다.</p>-->
+            <div id="typoList" class="typo-list"></div>
+        </section>
+    </main>
+    <section id="game" class="game hidden">
+        <div class="top">
+            <div><strong id="pname"></strong><small id="pteam" style="display:block;color:var(--sub)"></small></div>
+            <div class="stats">
+                <div class="stat"><small>실시간 타수</small><strong id="tpm">0</strong> TPM</div>
+                <div class="stat"><small>진행 시간</small><strong id="timer">00:00.0</strong></div>
+                <div class="stat"><small>정확도</small><strong id="acc">100</strong>%</div>
+            </div>
+        </div>
+        <div class="stage">
+            <div class="bar"><i id="prog" style="width:20%"></i></div>
+            <div class="meta"><span id="qno"></span><span>빈칸을 완성하세요</span></div>
+            <div id="sentence" class="sentence"></div>
+            <div class="type"><input id="typing" autocomplete="off">
+                <div id="visual" class="visual"><span class="caret"></span></div>
+            </div><span class="note">입력 중 수정은 감점되지 않습니다. Enter로 제출한 최종 문장만 정확도에 반영됩니다.</span>
+        </div>
+    </section>
+    <div id="startModal" class="modal hidden">
+        <div class="dialog">
+            <h2>도전자 등록</h2>
+            <div class="field"><label>소속팀</label><input id="team" placeholder="예: AI홈UX디자인팀"></div>
+            <div class="field"><label>이름</label><input id="name" placeholder="예: 변상아"></div>
+            <div class="actions"><button id="cancel" class="ghost">취소</button><button id="start"
+                    class="primary">START</button></div>
+        </div>
+    </div>
+    <div id="resultModal" class="modal hidden">
+        <div class="dialog result">
+            <div style="font-size:55px">🏆</div>
+            <h2>도전 완료!</h2>
+            <p><b id="identity"></b>님의 기록이 저장되었습니다.</p>
+            <div id="rscore" class="big"></div>
+            <h3>최종 순위 <span id="rrank"></span>위</h3>
+            <div class="resultgrid">
+                <div><small>평균 타수</small><b id="rtpm"></b></div>
+                <div><small>진행 시간</small><b id="rtime"></b></div>
+                <div><small>정확도</small><b id="racc"></b></div>
+            </div><button id="homeBtn" class="primary" style="width:100%">랭킹 확인하기</button>
+        </div>
+    </div>
+    <script>
+        (() => {
+            'use strict';
+
+            const SUPABASE_URL = 'https://uebhmphislsvntitfism.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlYmhtcGhpc2xzdm50aXRmaXNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1NDk3OTksImV4cCI6MjEwMzEyNTc5OX0.Y_jCbZiB1E_QokYNSfyzPKGGbhcyHyo3x7MN0St2Lks';
+            const REST_URL = SUPABASE_URL + '/rest/v1';
+            const API_HEADERS = {
+                apikey: SUPABASE_ANON_KEY,
+                Authorization: 'Bearer ' + SUPABASE_ANON_KEY,
+                'Content-Type': 'application/json'
+            };
+            async function api(path, options = {}) {
+                const response = await fetch(REST_URL + path, {
+                    ...options,
+                    headers: { ...API_HEADERS, ...(options.headers || {}) }
+                });
+                const text = await response.text();
+                let body = null;
+                if (text) { try { body = JSON.parse(text); } catch { body = text; } }
+                if (!response.ok) {
+                    const detail = body && (body.message || body.hint || body.details);
+                    throw new Error(detail || `Supabase 요청 실패 (${response.status})`);
+                }
+                return body;
+            }
+
+            const S = [
+                '문제의 크기가 개선의 크기다',
+                '안되는 이유는 충분하다 이제 되는 방법을 찾는다',
+                '5%는 불가능해도 30%는 가능하다',
+                '모두의 AX로 Speed-up Value-up',
+                '우리가 보고하는 동안 누군가는 실행하고 있다',
+                '매일매일 1%가 혁신의 지름길',
+                '"즐거움"의 스위치를 켜야 잘 안다 잘 한다 자란다',
+                '꽉 막힌 소통은 LG전자 손상의 원인이 된다',
+                '회의실은 정답을 말하는 곳이 아니다 생각을 말하는 곳이다',
+                '배운다 배운걸 지우고 다시 배운다'
+            ];
+            const PRACTICE_SENTENCES = [
+                '정확한 입력은 빠른 입력보다 오래 남습니다.',
+                '천천히 읽고 바르게 쓰는 습관을 연습합니다.',
+                '띄어쓰기와 문장부호까지 차분하게 확인합니다.',
+                '한 문장씩 완성하며 나만의 리듬을 찾습니다.'
+            ];
+            const AFFILIATIONS = ['직속', 'ES디자인연구소', 'HS디자인연구소', 'MS디자인연구소', 'VS디자인연구소', 'UX디자인연구소'];
+            const $ = selector => document.querySelector(selector);
+            const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+            let st = {};
+            let tick = null;
+            let selectedMode = 'challenge';
+            let challengeCount = 5;
+            try {
+                const savedCount = window.localStorage.getItem('reinventChallengeCount');
+                if (savedCount !== null) challengeCount = Math.min(10, Math.max(1, Number(savedCount) || 5));
+            } catch (error) {
+                console.info('샌드박스 환경에서는 문장 개수 설정을 현재 실행 중에만 유지합니다.');
+            }
+            let pendingWrites = [];
+            let refreshTimer = null;
+
+            const extraStyle = document.createElement('style');
+            extraStyle.textContent = `
+            .game-settings{position:fixed;top:20px;right:22px;z-index:50}
+            .settings-btn{border:1px solid #dfe1e8;background:#fff;color:#171820;border-radius:999px;padding:10px 14px;font-weight:850;box-shadow:0 8px 24px #25283b18;cursor:pointer}
+            .settings-panel{position:absolute;top:48px;right:0;width:230px;background:#fff;border:1px solid #ececf1;border-radius:17px;padding:16px;box-shadow:0 18px 50px #17182025}
+            .settings-panel label{display:block;font-size:13px;font-weight:850;margin-bottom:8px}
+            .settings-panel select{width:100%;border:1.5px solid #e2e3e9;border-radius:12px;padding:11px;background:#fff;font:inherit}
+            .settings-help{margin:9px 0 0;color:#777b87;font-size:11px;line-height:1.45}
+            .mode-switch{position:fixed;top:20px;right:82px;z-index:49;display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;background:#fff;border:1px solid #dfe1e8;border-radius:999px;box-shadow:0 8px 24px #25283b18}
+            .mode-btn{border:0;background:transparent;color:#6f7280;border-radius:999px;padding:8px 11px;font-size:12px;font-weight:850;cursor:pointer;white-space:nowrap}
+            .mode-btn.active{background:#c81743;color:#fff}
+            .practice-badge{display:inline-block;margin-left:8px;padding:3px 8px;border-radius:999px;background:#e9f7f1;color:#157b58;font-size:11px;font-weight:850}
+            #ranking.ranking{min-height:0;max-height:390px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;padding-right:7px;scrollbar-gutter:stable}
+            #ranking.ranking::-webkit-scrollbar{width:8px} #ranking.ranking::-webkit-scrollbar-track{background:#f0f1f5;border-radius:999px} #ranking.ranking::-webkit-scrollbar-thumb{background:#c9cbd4;border-radius:999px}
+            .affiliation-field select{width:100%;padding:14px;border:1.5px solid #e7e9ef;border-radius:13px;background:#fff;font:inherit;color:#171820}
+            .affiliation-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
+            .affiliation-group{display:grid;gap:8px;margin-bottom:0;min-width:0;padding:10px;border:1px solid #ececf1;border-radius:16px;background:#fafafd}
+            .affiliation-title{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:9px 11px;border-radius:12px;background:#242630;color:#fff;font-size:13px;font-weight:900}
+            .affiliation-count{color:#b9bbc4;font-size:11px;font-weight:700}
+            .overall-ranking{display:grid;gap:8px;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #e7e9ef}
+            .overall-title{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:12px;background:linear-gradient(135deg,#c81743,#e24667);color:#fff;font-size:13px;font-weight:900}
+            .overall-title small{font-size:11px;font-weight:700;color:#ffe7ed}
+            .loading{display:grid;place-items:center;min-height:180px;color:#727583;text-align:center}
+            .db-error{padding:14px;border-radius:14px;background:#fff0f3;color:#a61235;font-size:13px;line-height:1.55}
+            @media(max-width:750px){.mode-switch{top:12px;right:66px}.game-settings{top:12px;right:12px}.settings-btn{padding:8px 11px;font-size:12px}#ranking.ranking{max-height:365px}.affiliation-grid{grid-template-columns:1fr}}
+        `;
+            document.head.appendChild(extraStyle);
+
+            function setupControls() {
+                const settings = document.createElement('div');
+                settings.className = 'game-settings';
+                settings.innerHTML = `<button id="settingsBtn" class="settings-btn" type="button" aria-expanded="false">⚙️</button><div id="settingsPanel" class="settings-panel hidden"><label for="sentenceCountSelect">도전 문장 개수</label><select id="sentenceCountSelect">${Array.from({ length: 10 }, (_, i) => `<option value="${i + 1}">${i + 1}개</option>`).join('')}</select><p class="settings-help">10개 문장 중 선택한 개수만큼 무작위로 출제됩니다.</p></div>`;
+                document.body.appendChild(settings);
+                const mode = document.createElement('div');
+                mode.className = 'mode-switch';
+                mode.innerHTML = '<button class="mode-btn active" data-mode="challenge" type="button">도전 모드</button><button class="mode-btn" data-mode="practice" type="button">연습 모드</button>';
+                document.body.appendChild(mode);
+                const teamField = $('#team').closest('.field');
+                teamField.querySelector('label').textContent = '팀';
+                const affiliationField = document.createElement('div');
+                affiliationField.className = 'field affiliation-field';
+                affiliationField.innerHTML = `<label for="affiliation">소속</label><select id="affiliation" required><option value="" disabled selected>소속을 선택하세요</option>${AFFILIATIONS.map(a => `<option value="${a}">${a}</option>`).join('')}</select>`;
+                teamField.parentNode.insertBefore(affiliationField, teamField);
+                const select = $('#sentenceCountSelect');
+                select.value = String(challengeCount);
+                updateHomeCopy();
+                $('#settingsBtn').onclick = event => { event.stopPropagation(); const open = $('#settingsPanel').classList.toggle('hidden') === false; $('#settingsBtn').setAttribute('aria-expanded', String(open)); };
+                $('#settingsPanel').onclick = event => event.stopPropagation();
+                document.addEventListener('click', () => { $('#settingsPanel').classList.add('hidden'); $('#settingsBtn').setAttribute('aria-expanded', 'false'); });
+                select.onchange = () => { challengeCount = Number(select.value); try { window.localStorage.setItem('reinventChallengeCount', String(challengeCount)); } catch (error) { console.info('샌드박스 환경에서는 설정을 저장하지 않습니다.'); } updateHomeCopy(); };
+                mode.onclick = event => { const button = event.target.closest('.mode-btn'); if (!button) return; selectedMode = button.dataset.mode; paintMode(); };
+            }
+
+            function paintMode() {
+                document.querySelectorAll('.mode-btn').forEach(button => button.classList.toggle('active', button.dataset.mode === selectedMode));
+                $('#challenge').textContent = selectedMode === 'practice' ? '연습 시작하기 →' : '도전 시작하기 →';
+            }
+            function updateHomeCopy() {
+                $('.challenge b').textContent = challengeCount;
+                $('.challenge p').innerHTML = `10개 문장 중 ${challengeCount}개가 무작위로 출제됩니다.<br>문장 뒷부분의 빈칸을 완성해 보세요.`;
+            }
+            function question(text) {
+                const target = text.length - Math.ceil(text.length * .5);
+                let start = text.indexOf(' ', target);
+                start = start < 0 ? ((text.lastIndexOf(' ', target) + 1) || target) : start + 1;
+                return { text, start, answer: text.slice(start) };
+            }
+            function editDistance(a, b) {
+                const d = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+                for (let i = 0; i <= a.length; i++) d[i][0] = i;
+                for (let j = 0; j <= b.length; j++) d[0][j] = j;
+                for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+                return d[a.length][b.length];
+            }
+            function funnyTypoScore(wrong, right) {
+                const diff = editDistance(wrong, right);
+                const lengthGap = Math.abs(wrong.length - right.length);
+                let score = 0;
+                // 정답과 너무 비슷한 단순 오타보다 변화가 있는 문장에 점수
+                score += Math.min(diff, 10) * 2;
+                // 너무 짧게 입력하거나 입력하지 않은 오답은 제외
+                if (!wrong || wrong === '(입력 없음)') {
+                    return -100;
+                }
+                // 문장이 지나치게 짧아진 경우 감점
+                if (wrong.length < right.length * 0.5) {
+                    score -= 15;
+                }
+                // 원문보다 지나치게 길어진 경우 감점
+                if (wrong.length > right.length * 1.8) {
+                    score -= 10;
+                }
+                // 길이 차이가 너무 크면 무작위 입력일 가능성이 있어 감점
+                score -= Math.max(0, lengthGap - 5);
+                // 반복 문자나 키보드 난타 형태 감점
+                if (/(.)\1{3,}/.test(wrong)) {
+                    score -= 15;
+                }
+                // 자음이나 모음만 이어지는 입력 감점
+                if (/[ㄱ-ㅎㅏ-ㅣ]{4,}/.test(wrong)) {
+                    score -= 15;
+                }
+                return score;
+            }
+            function stats() {
+                const sec = Math.max(.1, (performance.now() - st.start) / 1000);
+                const tpm = Math.round(st.submittedChars / sec * 60);
+                const acc = st.expectedChars ? Math.max(0, (st.expectedChars - st.errors) / st.expectedChars * 100) : 100;
+                return { sec, tpm, acc };
+            }
+            function update() {
+                const x = stats(); $('#tpm').textContent = x.tpm; $('#acc').textContent = Math.round(x.acc);
+                $('#timer').textContent = `${String(Math.floor(x.sec / 60)).padStart(2, '0')}:${String(Math.floor(x.sec % 60)).padStart(2, '0')}.${Math.floor(x.sec % 1 * 10)}`;
+            }
+            function showQuestion() {
+                const q = st.q[st.i]; $('#qno').textContent = `QUESTION ${st.i + 1} / ${st.q.length}`; $('#prog').style.width = ((st.i + 1) / st.q.length * 100) + '%';
+                $('#sentence').innerHTML = st.mode === 'practice' ? esc(q.answer) : esc(q.text.slice(0, q.start)) + `<span class="blank" style="width:${Math.max(100, q.answer.length)}%">${esc(q.answer)}</span>`;
+                $('#typing').value = ''; $('#visual').innerHTML = '<span class="caret"></span>';
+            }
+            function startGame(mode) {
+                pendingWrites = [];
+                if (mode === 'practice') st = { mode, team: '연습 모드', name: '연습자', q: PRACTICE_SENTENCES.map(text => ({ text, start: 0, answer: text })), i: 0, start: performance.now(), expectedChars: 0, errors: 0, submittedChars: 0, done: false, lock: false };
+                else {
+                    const affiliation = $('#affiliation').value, team = $('#team').value.trim(), name = $('#name').value.trim();
+                    if (!affiliation || !team || !name) { alert('소속, 팀, 이름을 모두 입력해 주세요.'); return; }
+                    st = { mode, affiliation, team, name, q: [...S].sort(() => Math.random() - .5).slice(0, challengeCount).map(question), i: 0, start: performance.now(), expectedChars: 0, errors: 0, submittedChars: 0, done: false, lock: false };
+                }
+                $('#pname').innerHTML = mode === 'practice' ? '연습 모드 <span class="practice-badge">기록 미저장</span>' : esc(st.name);
+                $('#pteam').textContent = mode === 'practice' ? '소속과 이름 입력 없이 바로 연습합니다.' : `${st.affiliation} · ${st.team}`;
+                $('#startModal').classList.add('hidden'); $('#home').classList.add('hidden'); $('#game').classList.remove('hidden');
+                showQuestion(); clearInterval(tick); tick = setInterval(update, 100); $('#typing').focus();
+            }
+
+            async function fetchRanks() {
+                return await api('/typing_rank?select=id,name,affiliation,team,score,time,created_at&order=score.desc,time.asc&limit=500') || [];
+            }
+            async function renderRanks() {
+                const board = $('#ranking'); board.innerHTML = '<div class="loading">공유 랭킹을 불러오는 중입니다.</div>';
+                try {
+                    const list = (await fetchRanks()).filter(r => Number.isFinite(Number(r.score)));
+                    if (!list.length) { board.innerHTML = '<div class="empty">아직 기록이 없습니다.<br>첫 번째 챔피언이 되어보세요!</div>'; return; }
+                    const top = list.slice(0, 3);
+                    const groups = AFFILIATIONS.map(affiliation => ({ affiliation, items: list.filter(r => r.affiliation === affiliation) })).filter(g => g.items.length);
+                    const legacy = list.filter(r => !AFFILIATIONS.includes(r.affiliation)); if (legacy.length) groups.push({ affiliation: '기존 기록', items: legacy });
+                    const row = (r, i, overall = false) => `<div class="row"><div class="rank">${['🥇 1위', '🥈 2위', '🥉 3위'][i] || `${i + 1}위`}</div><div><div class="name">${esc(r.name)}</div><div class="team">${overall ? esc((r.affiliation || '기존 기록') + ' · ') : ''}${esc(r.team)}</div></div><div class="score">${Number(r.score).toLocaleString()}점</div></div>`;
+                    board.innerHTML = `<section class="overall-ranking"><div class="overall-title"><span>🏆 전체 TOP 3</span><small>전체 도전자 기준</small></div>${top.map((r, i) => row(r, i, true)).join('')}</section><div class="affiliation-grid">${groups.map(g => `<section class="affiliation-group"><div class="affiliation-title"><span>${esc(g.affiliation)}</span><span class="affiliation-count">${g.items.length}명</span></div>${g.items.map((r, i) => row(r, i)).join('')}</section>`).join('')}</div>`;
+                } catch (error) {
+                    console.error(error); board.innerHTML = `<div class="db-error"><b>Supabase 연결 또는 테이블 설정을 확인해 주세요.</b><br>${esc(error.message || error)}</div>`;
+                }
+            }
+            async function saveTypo(wrong, right) {
+                if (wrong === right || st.mode === 'practice') return;
+                const task = api('/typing_typos', {
+                    method: 'POST',
+                    headers: { Prefer: 'return=minimal' },
+                    body: JSON.stringify({ wrong_text: wrong || '(입력 없음)', right_text: right, name: st.name, affiliation: st.affiliation, team: st.team })
+                });
+                pendingWrites.push(task); await task;
+            }
+            async function renderTypos() {
+                try {
+                    const rawList = await api(
+                    '/typing_typos?select=wrong_text,right_text,name,affiliation,team,created_at&order=created_at.desc&limit=100'
+                ) || [];
+                 
+                const list = rawList
+                    .map((item, index) => ({
+                    ...item,
+                    funScore:
+                    funnyTypoScore(item.wrong_text, item.right_text)
+                    + Math.max(0, 10 - index * 0.1)
+                    }))
+                    .filter(item => item.funScore > -50)
+                    .sort((a, b) => {
+                    // 재미 점수가 높은 오답 우선
+                    if (b.funScore !== a.funScore) {
+                        return b.funScore - a.funScore;
+                    }
+                     
+                    // 재미 점수가 같으면 먼저 등록된 오답 우선
+                    return new Date(a.created_at) - new Date(b.created_at);
+                    })
+                    .slice(0, 6);
+                 
+                $('#typoList').innerHTML = list.length
+                ? list.map(x => `
+                <div class="typo">
+                <div class="typed">
+                “${esc(x.wrong_text)}”
+                </div>
+                <div class="by">
+                ${esc(
+                x.affiliation
+                ? x.affiliation + ' · '
+                : ''
+                )}
+                ${esc(x.team)} · ${esc(x.name)}
+                </div>
+                </div>
+                `).join('')
+                : `
+                <div class="typo-empty">
+                아직 오타가 없습니다.
+                첫 번째 명작을 남겨보세요!
+                </div>
+                `;
+                } catch (error) {
+                console.error(error);
+                 
+                $('#typoList').innerHTML = `
+                <div class="typo-empty">
+                오답 기록을 불러오지 못했습니다.
+                </div>
+                `;
+                }
+            }
+            async function finishChallenge() {
+                if (st.done) return; st.done = true; clearInterval(tick); const x = stats();
+                const score = Math.max(0, Math.round(x.tpm * 10 * Math.pow(x.acc / 100, 2) + Math.max(0, 3000 - Math.round(x.sec) * 25)));
+                try {
+                    await Promise.allSettled(pendingWrites);
+                    const inserted = await api('/typing_rank', {
+                        method: 'POST',
+                        headers: { Prefer: 'return=representation' },
+                        body: JSON.stringify({ name: st.name, affiliation: st.affiliation, team: st.team, score, time: Number(x.sec.toFixed(3)) })
+                    });
+                    const data = Array.isArray(inserted) ? inserted[0] : inserted;
+                    if (!data || data.id == null) throw new Error('저장 결과에서 기록 ID를 받지 못했습니다.');
+                    const list = await fetchRanks(); const rank = list.findIndex(r => String(r.id) === String(data.id)) + 1;
+                    $('#identity').textContent = `${st.affiliation} · ${st.team} ${st.name}`; $('#rscore').textContent = score.toLocaleString() + '점'; $('#rrank').textContent = rank || '-';
+                    $('#rtpm').textContent = x.tpm + ' TPM'; $('#rtime').textContent = x.sec.toFixed(1) + '초'; $('#racc').textContent = x.acc.toFixed(1) + '%';
+                    $('#resultModal').classList.remove('hidden'); await Promise.all([renderRanks(), renderTypos()]);
+                } catch (error) {
+                    st.done = false; console.error(error); alert('기록 저장에 실패했습니다. Supabase 테이블과 RLS 정책을 확인한 뒤 다시 시도해 주세요.\n\n' + (error.message || error));
+                }
+            }
+            function finishPractice() {
+                if (st.done) return; st.done = true; clearInterval(tick); const x = stats();
+                const score = Math.max(0, Math.round(x.tpm * 10 * Math.pow(x.acc / 100, 3) + Math.max(0, 2500 - Math.round(x.sec) * 20) + x.acc * 10));
+                $('#identity').textContent = '연습 모드'; $('#rscore').textContent = score.toLocaleString() + '점'; $('#rrank').parentElement.innerHTML = '연습 결과 · 랭킹에 저장되지 않음';
+                $('#rtpm').textContent = x.tpm + ' TPM'; $('#rtime').textContent = x.sec.toFixed(1) + '초'; $('#racc').textContent = x.acc.toFixed(1) + '%'; $('#resultModal').classList.remove('hidden');
+            }
+            function resetResultTitle() { const h = $('#rscore').nextElementSibling; if (h) h.innerHTML = '최종 순위<span id="rrank"></span>';}
+            function scheduleRefresh() { clearTimeout(refreshTimer); refreshTimer = setTimeout(() => Promise.all([renderRanks(), renderTypos()]), 250); }
+
+            setupControls(); paintMode();
+            $('#challenge').onclick = () => selectedMode === 'practice' ? startGame('practice') : $('#startModal').classList.remove('hidden');
+            $('#cancel').onclick = () => $('#startModal').classList.add('hidden');
+            $('#start').onclick = () => startGame('challenge');
+            $('#typing').oninput = event => { $('#visual').textContent = event.target.value; const caret = document.createElement('span'); caret.className = 'caret'; $('#visual').appendChild(caret); };
+            $('#typing').onkeydown = event => {
+                if (event.key !== 'Enter' || st.lock || st.done) return; event.preventDefault(); const q = st.q[st.i], value = event.target.value, diff = editDistance(value, q.answer);
+                st.expectedChars += q.answer.length; st.errors += diff; st.submittedChars += value.length; 
+                if (diff > 0 && st.mode !== 'practice') {saveTypo(q.text.slice(0, q.start) + value, q.text).catch(console.error);}
+                update(); st.lock = true;
+                setTimeout(() => { if (st.i === st.q.length - 1) { st.mode === 'practice' ? finishPractice() : finishChallenge(); } else { st.i++; st.lock = false; showQuestion(); $('#typing').focus(); } }, 150);
+            };
+            $('#homeBtn').onclick = () => { $('#resultModal').classList.add('hidden'); $('#game').classList.add('hidden'); $('#home').classList.remove('hidden'); resetResultTitle(); selectedMode = 'challenge'; paintMode(); scheduleRefresh(); };
+            $('#reset').onclick = async () => {
+                const first = confirm('공유 랭킹과 오답 기록을 모든 기기에서 삭제합니다. 계속할까요?'); if (!first) return;
+                const typed = prompt('실수 방지를 위해 RESET을 입력해 주세요.'); if (typed !== 'RESET') { alert('취소되었습니다.'); return; }
+                try {
+                    await Promise.all([
+                        api('/typing_rank?id=gte.0', { method: 'DELETE', headers: { Prefer: 'return=minimal' } }),
+                        api('/typing_typos?id=gte.0', { method: 'DELETE', headers: { Prefer: 'return=minimal' } })
+                    ]);
+                } catch (error) { console.error(error); alert('삭제 권한이 없습니다. Supabase의 DELETE 정책을 확인해 주세요.\n\n' + error.message); return; }
+                await Promise.all([renderRanks(), renderTypos()]);
+            };
+            window.addEventListener('pageshow', scheduleRefresh);
+            document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') scheduleRefresh(); });
+            renderRanks(); renderTypos();
+        })();
+    </script>
+</body>
+
+</html>
